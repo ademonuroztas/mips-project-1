@@ -39,7 +39,7 @@ CHAR_COUNT:
     lb $a0, 0($t0)
     beq $a0, $zero, NULL_ERROR
     addi $t0, $t0, 1
-    addi $t1, $t1, 1 # t1 = Char number of String 1
+    addi $t1, $t1, 1
     syscall
     j CHAR_COUNT
 
