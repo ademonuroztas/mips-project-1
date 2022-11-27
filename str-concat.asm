@@ -1,7 +1,7 @@
 .data
 
-str_1: .asciiz "String 1"
-str_2: .asciiz "String 2"
+str_1: .asciiz "Hello"
+str_2: .asciiz "World"
 str_3: .asciiz ""
 
 nline: .asciiz "\n"
@@ -13,26 +13,6 @@ concd_string: .asciiz ""
 .globl main
 
 main:
-
-BEGIN:
-
-li $v0, 4
-la $a0, str_1
-syscall
-
-la $a0, nline
-syscall
-
-la $a0, str_2
-syscall
-
-la $a0, nline
-syscall
-
-
-li $v0, 11
-la $t0, str_1
-
 j EXECUTE
 
 CHAR_COUNT:
@@ -58,26 +38,44 @@ NULL_ERROR:
 
 
 EXECUTE:
+    li $v0, 11
+    la $t0, str_1
+    move $s0, $t0 # s0 = address of str_1
+
     jal CHAR_COUNT
+    move $s1, $t1 # s1 = letter number of str_1
 
-la $t0, str_1
-la $t2, str_3
+    move $t0, $zero # reset t0
+    move $t1, $zero # reset t1
 
-LOOP:
+    li $v0, 11
+    la $t0, str_2
+    move $s2, $t0 # s2 = address of str_2
+    
+    jal CHAR_COUNT
+    move $s3, $t1 # s3 = letter number of str_2
     
 
-    bgt $t5,$t1,exit
-    addi $t5,$t5,1
-
-    lb $a0, 0($t0)
-    beq $a0, $zero, NULL_ERROR
-    sb $a0, 0($t2) # t2 = copy of first string (address)
-    addi $t2, $t2, 1
-    addi $t0, $t0, 1
+    
+    la $t0, str_1
+    la $t4, str_3
 
 
+    li $v0, 4
+    la $a0, nline
+    syscall
 
-    j LOOP  
+
+#LOOP:
+    #bgt $t9,$t1,exit
+    #addi $t9,$t9,1
+
+    #lb $a0, 0($t0)
+    #beq $a0, $zero, NULL_ERROR
+    #sb $a0, 0($t4)
+    #addi $t4, $t4, 1
+    #addi $t0, $t0, 1
+    #j LOOP  
 
 
 
@@ -86,7 +84,7 @@ exit:
 
 li $v0, 4
 la $a0, str_3
-syscall
+#syscall
 
 li $v0, 10
 syscall
