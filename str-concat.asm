@@ -1,7 +1,7 @@
 .data
 
-str_1: .asciiz "Hello"
-str_2: .asciiz "World"
+str_1: .asciiz "STR1 "
+str_2: .asciiz "STR2"
 str_3: .asciiz ""
 
 nline: .asciiz "\n"
@@ -17,10 +17,12 @@ j EXECUTE
 
 CHAR_COUNT:
     lb $a0, 0($t0)
+    sb $a0, 0($s4)
     beq $a0, $zero, NULL_ERROR
     addi $t0, $t0, 1
+    addi $s4, $s4, 1
     addi $t1, $t1, 1
-    syscall
+    #syscall
     j CHAR_COUNT
 
 NULL_ERROR:
@@ -41,7 +43,8 @@ EXECUTE:
     li $v0, 11
     la $t0, str_1
     move $s0, $t0 # s0 = address of str_1
-
+    la $t4, str_3 # t4 = start address of str_3
+    la $s4, str_3 # s4 = current address of str_3
     jal CHAR_COUNT
     move $s1, $t1 # s1 = letter number of str_1
 
@@ -58,12 +61,12 @@ EXECUTE:
 
     
     la $t0, str_1
-    la $t4, str_3
+    #la $t4, str_3
 
 
-    li $v0, 4
-    la $a0, nline
-    syscall
+    #li $v0, 4
+    #la $a0, nline
+    #syscall
 
 
 #LOOP:
@@ -83,8 +86,8 @@ exit:
 
 
 li $v0, 4
-la $a0, str_3
-#syscall
+move $a0, $t4
+syscall
 
 li $v0, 10
 syscall
